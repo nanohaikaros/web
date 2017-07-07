@@ -1,4 +1,4 @@
-#! usr/bin/env python
+#!/usr/bin/env python
 # Simple Gopher Client with file-like interface - Chapter 1
 # gopherclient3.py
 

@@ -1,4 +1,4 @@
-#!usr/bin/env python
+#!/usr/bin/env python
 # Simple Gopher Client with basic error handing - Chapter 1
 # gopherclient2.py
 
