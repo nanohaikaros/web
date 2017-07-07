@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Error Handing Example - Chapter 2 - sockererrors.py
+# Error Handling Example - Chapter 2 - sockererrors.py
 
 import socket, sys
 

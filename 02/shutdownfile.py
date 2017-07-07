@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-# Error Handling Example With Shutdown - Chapter 2 - shutdown.py
+# Error Handling Example With Shutdown and File-like objects - Chapter 2
+# shutdownfile.py
 
 import socket, sys, time
 
@@ -13,7 +14,7 @@ except socket.error as e:
     print "Strange error creating socket: %s" % e
     sys.exit(1)
 
-# Try parsing it as a numeric port number.
+# Try parsing is as a numeric port number.
 
 try:
     port = int(textport)
@@ -28,34 +29,44 @@ except ValueError:
 try:
     s.connect((host, port))
 except socket.gaierror as e:
-    print "Address-related error connecting to server: %s" % e
+    print "Address-related error connecting to server %s" % e
     sys.exit(1)
 except socket.error as e:
     print "Connection error: %s" % e
     sys.exit(1)
+
+fd = s.makefile('rw', 0)
 
 print "sleeping..."
 time.sleep(10)
 print "Continuing."
 
 try:
-    s.sendall("GET %s HTTP/1.0\r\n\r\n" % filename)
+    fd.write("GET %s HTTP/1.0\r\n\r\n" % filename)
 except socket.error as e:
     print "Error sending data: %s" % e
     sys.exit(1)
 
 try:
+    fd.flush()
+except socket.error as e:
+    print "Error sending data (datected by flush): %s" % e
+    sys.exit(1)
+
+try:
     s.shutdown(1)
+    s.close()
 except socket.error as e:
     print "Error sending data (datected by shutdown): %s" % e
     sys.exit(1)
 
 while 1:
     try:
-        buf = s.recv(2048)
+        buf = fd.read(2048)
     except socket.error as e:
         print "Error receiving data: %s" % e
         sys.exit(1)
     if not len(buf):
         break
     sys.stdout.write(buf)
+
