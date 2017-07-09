@@ -1,15 +1,20 @@
 #!/usr/bin/env python
-# Obtain Web Page Information With Simple Error Handling - Chapter 6
-# error_basic.py
+# Obtain Web Page Information With Error Document Handling - Chapter 6
+# error_doc.py
 import sys, urllib2
 
 req = urllib2.Request(sys.argv[1])
 
 try:
     fd = urllib2.urlopen(req)
+except urllib2.HTTPError as e:
+    print "Error retrieving data:", e
+    print "Server error document follows:\n"
+    print e.read()
+    sys.exit(1)
 except urllib2.URLError as e:
     print "Error retrieving data:", e
-    sys.exit(1)
+    sys.exit(2)
 
 print "Retrieved", fd.geturl()
 info = fd.info()
